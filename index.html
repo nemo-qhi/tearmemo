@@ -8,13 +8,80 @@
   <style>
 :root {
   color-scheme: light dark;
+    --cn-theme-page: #f0f4f0;
+    --cn-theme-workspace: #f7f8f6;
+    --cn-theme-paper: #ffffff;
+    --cn-theme-text: #263d33;
+    --cn-theme-muted-text: #60756a;
+    --cn-theme-border: #dce5df;
+    --cn-theme-accent: #275b46;
+    --cn-theme-accent-text: #fff;
+    --cn-theme-tint: #e8f1e9;
+    --cn-theme-tab-shadow: #263d3312;
+    --cn-theme-card-shadow: #263d330d;
+    --cn-theme-checkbox: #76623a;
+    --cn-theme-delete: #8b3c31;
+    --cn-theme-plain-shade: #8b7e5710;
+    --cn-theme-fiber-light: #fff5;
+    --cn-theme-fiber-shade: #5544270d;
+    --cn-theme-kraft: #c79860;
+    --cn-theme-kraft-light: #fff5;
+    --cn-theme-kraft-shade: #78512a28;
+    --cn-theme-kraft-border: #9e74477a;
+    --cn-theme-kraft-text: #4f3826;
+    --cn-theme-board-sand: #f5ead8;
+    --cn-theme-board-mint: #e5f1e9;
+    --cn-theme-board-sky: #e6eff8;
+    --cn-theme-board-lavender: #eee8f7;
+    --cn-theme-card-yellow: #fff0b9;
+    --cn-theme-card-pink: #fce1e8;
+    --cn-theme-card-green: #dff2dd;
+    --cn-theme-card-blue: #deedf9;
+    --cn-theme-card-purple: #eee2f9;
+    --cn-theme-board-dot: #263d332b;
+}
+
+@media (prefers-color-scheme: dark) {
+  :root {
+    --cn-theme-page: #121613;
+    --cn-theme-workspace: #191e1b;
+    --cn-theme-paper: #242c27;
+    --cn-theme-text: #e5eee8;
+    --cn-theme-muted-text: #acbdb2;
+    --cn-theme-border: #3e4c43;
+    --cn-theme-accent: #b4dec5;
+    --cn-theme-accent-text: #163424;
+    --cn-theme-tint: #2c4435;
+    --cn-theme-tab-shadow: #0003;
+    --cn-theme-card-shadow: #0003;
+    --cn-theme-checkbox: #ecd395;
+    --cn-theme-delete: #ffc4b6;
+    --cn-theme-plain-shade: #c0bdab0d;
+    --cn-theme-fiber-light: #ffffff09;
+    --cn-theme-fiber-shade: #0002;
+    --cn-theme-kraft: #5e432e;
+    --cn-theme-kraft-light: #ffffff0b;
+    --cn-theme-kraft-shade: #0003;
+    --cn-theme-kraft-border: #a9825b72;
+    --cn-theme-kraft-text: #f1d8be;
+    --cn-theme-board-sand: #393026;
+    --cn-theme-board-mint: #23352e;
+    --cn-theme-board-sky: #263440;
+    --cn-theme-board-lavender: #372e43;
+    --cn-theme-card-yellow: #41381d;
+    --cn-theme-card-pink: #472d38;
+    --cn-theme-card-green: #293e2e;
+    --cn-theme-card-blue: #293849;
+    --cn-theme-card-purple: #3b3048;
+    --cn-theme-board-dot: #e5eee82b;
+  }
 }
 
 body {
   margin: 0 auto;
   max-width: 1440px;
   padding: 20px;
-  background: light-dark(#f0f4f0, #121613);
+  background: var(--cn-theme-page);
 }
 
 @media (max-width: 600px) {
@@ -23,15 +90,15 @@ body {
   }
 }
 
-#chigiri-notes{--cn-bg:light-dark(#f7f8f6,#191e1b);--cn-paper:light-dark(#ffffff,#242c27);--cn-ink:light-dark(#263d33,#e5eee8);--cn-soft:light-dark(#60756a,#acbdb2);--cn-line:light-dark(#dce5df,#3e4c43);--cn-accent:light-dark(#275b46,#b4dec5);--cn-on:light-dark(#fff,#163424);--cn-tint:light-dark(#e8f1e9,#2c4435);color:var(--cn-ink);font-family:"Yu Gothic UI","Hiragino Sans",sans-serif;font-size:16px;line-height:1.6;background:var(--cn-bg);border:1px solid var(--cn-line);border-radius:18px;overflow:hidden}
-#chigiri-notes *{box-sizing:border-box}#chigiri-notes [hidden]{display:none!important}#chigiri-notes button,#chigiri-notes input,#chigiri-notes textarea{font:inherit;color:inherit}#chigiri-notes button{cursor:pointer}#chigiri-notes button:disabled{opacity:.45;cursor:default}#chigiri-notes button:focus-visible,#chigiri-notes input:focus-visible,#chigiri-notes textarea:focus-visible{outline:3px solid var(--cn-accent);outline-offset:3px}#chigiri-notes h2,#chigiri-notes h3{margin:0;font-weight:500}#chigiri-notes h2{font-size:18px}#chigiri-notes h3{font-size:26px;letter-spacing:.04em}#chigiri-notes svg{width:18px;height:18px;flex-shrink:0}#chigiri-notes .cn-header{display:flex;align-items:center;justify-content:space-between;gap:16px;padding:22px 30px;border-bottom:1px solid var(--cn-line)}#chigiri-notes .cn-brand{display:flex;align-items:center;gap:12px}#chigiri-notes .cn-mark{font-family:Georgia,serif;font-size:36px;color:var(--cn-accent)}#chigiri-notes .cn-sub,#chigiri-notes .cn-prototype{font-size:13px;color:var(--cn-soft)}#chigiri-notes .cn-prototype{margin-right:65px}#chigiri-notes .cn-top{padding:28px 30px 24px;display:flex;align-items:center;justify-content:space-between;gap:20px;flex-wrap:wrap}#chigiri-notes .cn-eyebrow{font-size:11px;letter-spacing:.16em;color:var(--cn-soft)}#chigiri-notes .cn-modes{display:flex;padding:4px;background:var(--cn-tint);border-radius:12px;gap:4px}#chigiri-notes .cn-modes button{border:0;border-radius:8px;padding:9px 15px;display:flex;align-items:center;gap:8px;background:transparent}#chigiri-notes .cn-modes button[aria-selected=true]{background:var(--cn-paper);box-shadow:0 2px 7px light-dark(#263d3312,#0003)}#chigiri-notes #cn-count{font-size:12px}#chigiri-notes .cn-page{margin:0 30px 24px;padding:24px 28px 25px;background:var(--cn-paper);border:1px solid var(--cn-line);border-radius:4px;min-height:310px}#chigiri-notes .cn-pagehead{display:flex;justify-content:space-between;gap:12px;flex-wrap:wrap;margin-bottom:22px;color:var(--cn-soft);font-size:14px}#chigiri-notes .cn-row{display:grid;grid-template-columns:24px 1fr auto;gap:12px;align-items:center;border-bottom:1px solid var(--cn-line);padding:var(--cn-rowpad,14px) 0}#chigiri-notes .cn-row input[type=checkbox]{width:19px;height:19px;accent-color:var(--cn-accent);border-radius:50%;cursor:pointer}#chigiri-notes .cn-row input[type=text]{width:100%;min-width:0;border:0;background:transparent;padding:5px 0}#chigiri-notes .cn-linked{display:flex;align-items:center;gap:4px;color:var(--cn-soft);font-size:12px;white-space:nowrap}#chigiri-notes .cn-add{border:0;background:transparent;color:var(--cn-soft);display:flex;align-items:center;gap:8px;padding:16px 0 0}#chigiri-notes .cn-tearbar{display:flex;align-items:center;gap:20px;flex-wrap:wrap;padding:0 30px 26px}#chigiri-notes .cn-selection{display:flex;gap:8px;align-items:center;font-size:14px;margin-right:auto}#chigiri-notes .cn-linkchoice{display:flex;align-items:center;gap:8px;font-size:14px}#chigiri-notes .cn-linkchoice input{width:17px;height:17px;accent-color:var(--cn-accent)}#chigiri-notes .cn-primary{background:var(--cn-accent);color:var(--cn-on);border:0;border-radius:9px;padding:11px 18px}#chigiri-notes .cn-boardhead{padding:0 30px 18px;display:flex;justify-content:space-between;gap:10px;flex-wrap:wrap;font-size:14px}#chigiri-notes #cn-canvas{position:relative;margin:0 20px 20px;min-height:455px;background-image:radial-gradient(var(--cn-line) 1px,transparent 1px);background-size:20px 20px}#chigiri-notes .cn-scrap{position:absolute;width:min(258px,calc(100% - 24px));padding:0 18px 20px;background:var(--cn-paper);border:1px solid var(--cn-line);box-shadow:0 7px 14px light-dark(#263d330d,#0003);border-radius:3px}#chigiri-notes .cn-grip{background:transparent;border:0;border-bottom:1px dashed var(--cn-line);width:100%;padding:10px 0;display:flex;align-items:center;justify-content:space-between;gap:6px;color:var(--cn-soft);font-size:12px;cursor:grab;touch-action:none}#chigiri-notes .cn-grip:active{cursor:grabbing}#chigiri-notes .cn-scrap textarea{margin:14px 0 12px;width:100%;height:105px;resize:vertical;max-height:180px;border:0;background:transparent;padding:0;font-size:17px;line-height:1.7}#chigiri-notes .cn-cardtools{display:flex;gap:8px;flex-wrap:wrap;align-items:center}#chigiri-notes .cn-cardtools button{background:transparent;border:0;padding:4px 0;font-size:12px;color:var(--cn-soft)}#chigiri-notes .cn-cardtools button:last-child{margin-left:auto}#chigiri-notes .cn-cardtools label{display:flex;gap:5px;align-items:center;font-size:12px}#chigiri-notes .cn-cardtools input{accent-color:var(--cn-accent)}#chigiri-notes .cn-footer{border-top:1px solid var(--cn-line);display:flex;align-items:center;justify-content:space-between;gap:12px;padding:15px 30px;font-size:13px;color:var(--cn-soft)}#chigiri-notes .cn-footer button{border:0;background:transparent;white-space:nowrap;padding:6px 0}#chigiri-notes .cn-empty{padding:80px 16px;text-align:center;color:var(--cn-soft)}
+#chigiri-notes{--cn-bg:var(--cn-theme-workspace);--cn-paper:var(--cn-theme-paper);--cn-ink:var(--cn-theme-text);--cn-soft:var(--cn-theme-muted-text);--cn-line:var(--cn-theme-border);--cn-accent:var(--cn-theme-accent);--cn-on:var(--cn-theme-accent-text);--cn-tint:var(--cn-theme-tint);color:var(--cn-ink);font-family:"Yu Gothic UI","Hiragino Sans",sans-serif;font-size:16px;line-height:1.6;background:var(--cn-bg);border:1px solid var(--cn-line);border-radius:18px;overflow:hidden}
+#chigiri-notes *{box-sizing:border-box}#chigiri-notes [hidden]{display:none!important}#chigiri-notes button,#chigiri-notes input,#chigiri-notes textarea{font:inherit;color:inherit}#chigiri-notes button{cursor:pointer}#chigiri-notes button:disabled{opacity:.45;cursor:default}#chigiri-notes button:focus-visible,#chigiri-notes input:focus-visible,#chigiri-notes textarea:focus-visible{outline:3px solid var(--cn-accent);outline-offset:3px}#chigiri-notes h2,#chigiri-notes h3{margin:0;font-weight:500}#chigiri-notes h2{font-size:18px}#chigiri-notes h3{font-size:26px;letter-spacing:.04em}#chigiri-notes svg{width:18px;height:18px;flex-shrink:0}#chigiri-notes .cn-header{display:flex;align-items:center;justify-content:space-between;gap:16px;padding:22px 30px;border-bottom:1px solid var(--cn-line)}#chigiri-notes .cn-brand{display:flex;align-items:center;gap:12px}#chigiri-notes .cn-mark{font-family:Georgia,serif;font-size:36px;color:var(--cn-accent)}#chigiri-notes .cn-sub,#chigiri-notes .cn-prototype{font-size:13px;color:var(--cn-soft)}#chigiri-notes .cn-prototype{margin-right:65px}#chigiri-notes .cn-top{padding:28px 30px 24px;display:flex;align-items:center;justify-content:space-between;gap:20px;flex-wrap:wrap}#chigiri-notes .cn-eyebrow{font-size:11px;letter-spacing:.16em;color:var(--cn-soft)}#chigiri-notes .cn-modes{display:flex;padding:4px;background:var(--cn-tint);border-radius:12px;gap:4px}#chigiri-notes .cn-modes button{border:0;border-radius:8px;padding:9px 15px;display:flex;align-items:center;gap:8px;background:transparent}#chigiri-notes .cn-modes button[aria-selected=true]{background:var(--cn-paper);box-shadow:0 2px 7px var(--cn-theme-tab-shadow)}#chigiri-notes #cn-count{font-size:12px}#chigiri-notes .cn-page{margin:0 30px 24px;padding:24px 28px 25px;background:var(--cn-paper);border:1px solid var(--cn-line);border-radius:4px;min-height:310px}#chigiri-notes .cn-pagehead{display:flex;justify-content:space-between;gap:12px;flex-wrap:wrap;margin-bottom:22px;color:var(--cn-soft);font-size:14px}#chigiri-notes .cn-row{display:grid;grid-template-columns:24px 1fr auto;gap:12px;align-items:center;border-bottom:1px solid var(--cn-line);padding:var(--cn-rowpad,14px) 0}#chigiri-notes .cn-row input[type=checkbox]{width:19px;height:19px;accent-color:var(--cn-accent);border-radius:50%;cursor:pointer}#chigiri-notes .cn-row input[type=text]{width:100%;min-width:0;border:0;background:transparent;padding:5px 0}#chigiri-notes .cn-linked{display:flex;align-items:center;gap:4px;color:var(--cn-soft);font-size:12px;white-space:nowrap}#chigiri-notes .cn-add{border:0;background:transparent;color:var(--cn-soft);display:flex;align-items:center;gap:8px;padding:16px 0 0}#chigiri-notes .cn-tearbar{display:flex;align-items:center;gap:20px;flex-wrap:wrap;padding:0 30px 26px}#chigiri-notes .cn-selection{display:flex;gap:8px;align-items:center;font-size:14px;margin-right:auto}#chigiri-notes .cn-linkchoice{display:flex;align-items:center;gap:8px;font-size:14px}#chigiri-notes .cn-linkchoice input{width:17px;height:17px;accent-color:var(--cn-accent)}#chigiri-notes .cn-primary{background:var(--cn-accent);color:var(--cn-on);border:0;border-radius:9px;padding:11px 18px}#chigiri-notes .cn-boardhead{padding:0 30px 18px;display:flex;justify-content:space-between;gap:10px;flex-wrap:wrap;font-size:14px}#chigiri-notes #cn-canvas{position:relative;margin:0 20px 20px;min-height:455px;background-image:radial-gradient(var(--cn-line) 1px,transparent 1px);background-size:20px 20px}#chigiri-notes .cn-scrap{position:absolute;width:min(258px,calc(100% - 24px));padding:0 18px 20px;background:var(--cn-paper);border:1px solid var(--cn-line);box-shadow:0 7px 14px var(--cn-theme-card-shadow);border-radius:3px}#chigiri-notes .cn-grip{background:transparent;border:0;border-bottom:1px dashed var(--cn-line);width:100%;padding:10px 0;display:flex;align-items:center;justify-content:space-between;gap:6px;color:var(--cn-soft);font-size:12px;cursor:grab;touch-action:none}#chigiri-notes .cn-grip:active{cursor:grabbing}#chigiri-notes .cn-scrap textarea{margin:14px 0 12px;width:100%;height:105px;resize:vertical;max-height:180px;border:0;background:transparent;padding:0;font-size:17px;line-height:1.7}#chigiri-notes .cn-cardtools{display:flex;gap:8px;flex-wrap:wrap;align-items:center}#chigiri-notes .cn-cardtools button{background:transparent;border:0;padding:4px 0;font-size:12px;color:var(--cn-soft)}#chigiri-notes .cn-cardtools button:last-child{margin-left:auto}#chigiri-notes .cn-cardtools label{display:flex;gap:5px;align-items:center;font-size:12px}#chigiri-notes .cn-cardtools input{accent-color:var(--cn-accent)}#chigiri-notes .cn-footer{border-top:1px solid var(--cn-line);display:flex;align-items:center;justify-content:space-between;gap:12px;padding:15px 30px;font-size:13px;color:var(--cn-soft)}#chigiri-notes .cn-footer button{border:0;background:transparent;white-space:nowrap;padding:6px 0}#chigiri-notes .cn-empty{padding:80px 16px;text-align:center;color:var(--cn-soft)}
 @media(max-width:600px){#chigiri-notes .cn-header{padding:16px}#chigiri-notes .cn-prototype{display:none}#chigiri-notes .cn-top{padding:20px 16px;gap:16px}#chigiri-notes h3{font-size:22px}#chigiri-notes .cn-page{margin:0 16px 20px;padding:16px}#chigiri-notes .cn-row{gap:6px;grid-template-columns:24px 1fr}#chigiri-notes .cn-linked{grid-column:2}#chigiri-notes .cn-tearbar{padding:0 16px 20px;gap:12px}#chigiri-notes .cn-primary{width:100%}#chigiri-notes .cn-boardhead{padding:0 16px 16px}#chigiri-notes .cn-footer{padding:12px 16px;align-items:flex-start}#chigiri-notes #cn-canvas{margin:0 10px 16px}}
 @media(pointer:coarse){#chigiri-notes button{min-height:44px}#chigiri-notes .cn-row{min-height:52px}#chigiri-notes .cn-cardtools{gap:12px}}
 #chigiri-notes .cn-header{padding:12px 24px}
 #chigiri-notes .cn-mark{font-size:29px}
-#chigiri-notes .cn-workspace{display:grid;grid-template-columns:minmax(175px,23%) minmax(0,1fr)}
-#chigiri-notes .cn-library{border-inline-end:1px solid var(--cn-line);padding:17px 12px;background:color-mix(in srgb,var(--cn-tint) 45%,var(--cn-bg))}
-#chigiri-notes .cn-library-head{display:flex;justify-content:space-between;align-items:center;gap:5px;margin-bottom:10px}
+#chigiri-notes .cn-workspace{display:grid;grid-template-columns:minmax(200px,23%) minmax(0,1fr)}
+#chigiri-notes .cn-library{border-inline-end:1px solid var(--cn-line);padding:17px 12px;background:var(--cn-bg)}
+#chigiri-notes .cn-library-head{display:flex;justify-content:space-between;align-items:center;flex-wrap:wrap;gap:5px;margin-bottom:10px}
 #chigiri-notes .cn-library-head button,#chigiri-notes .cn-tools button{display:inline-flex;align-items:center;justify-content:center;gap:6px;white-space:nowrap;border:0;background:transparent;padding:6px 8px;border-radius:8px;font-size:13px}
 #chigiri-notes .cn-library-head svg,#chigiri-notes .cn-tools svg{width:16px;height:16px}
 #chigiri-notes #cn-new{color:var(--cn-accent);background:var(--cn-paper)}
@@ -53,7 +120,7 @@ body {
 #chigiri-notes .cn-palette select{font:inherit;color:var(--cn-ink);background:var(--cn-swatch,var(--cn-paper));border:1px solid var(--cn-line);border-radius:8px;padding:5px 6px;max-width:100%}
 #chigiri-notes select:focus-visible{outline:3px solid var(--cn-accent);outline-offset:2px}
 #chigiri-notes .cn-boardhint{color:var(--cn-soft);font-size:13px;margin:0 30px 10px;min-height:21px}
-#chigiri-notes #cn-canvas{isolation:isolate;min-height:430px;overflow:hidden;border-radius:9px;border:1px solid var(--cn-line);background-color:var(--cn-board-color,var(--cn-bg));background-image:radial-gradient(color-mix(in srgb,var(--cn-ink) 17%,transparent) 1px,transparent 1px)}
+#chigiri-notes #cn-canvas{isolation:isolate;min-height:430px;overflow:hidden;border-radius:9px;border:1px solid var(--cn-line);background-color:var(--cn-board-color,var(--cn-bg));background-image:radial-gradient(var(--cn-theme-board-dot) 1px,transparent 1px)}
 #chigiri-notes #cn-wires,#chigiri-notes #cn-ink{position:absolute;inset:0;width:100%;height:100%;pointer-events:none}
 #chigiri-notes #cn-wires{z-index:0}
 #chigiri-notes #cn-cards,#chigiri-notes #cn-ink-objects{position:absolute;inset:0;pointer-events:none}
@@ -76,27 +143,27 @@ body {
 #chigiri-notes .cn-rowmain input{flex:1 1 auto}
 #chigiri-notes .cn-rowcheck{display:grid;place-items:center;min-height:32px}
 #chigiri-notes .cn-rowcheck input{margin:0}
-#chigiri-notes .cn-row .cn-tearcheck input[type=checkbox]{accent-color:light-dark(#76623a,#ecd395)}
+#chigiri-notes .cn-row .cn-tearcheck input[type=checkbox]{accent-color:var(--cn-theme-checkbox)}
 #chigiri-notes .cn-row[data-done] input[type=text],#chigiri-notes .cn-scrap[data-done] textarea{color:var(--cn-soft);text-decoration:line-through;text-decoration-thickness:1px}
 #chigiri-notes .cn-scrap{transform:translate(-50%,-50%) rotate(var(--cn-paper-angle,0deg)) scale(var(--cn-paper-scale,1))}
 #chigiri-notes .cn-scrap[data-done] .cn-grip span:last-child{color:var(--cn-accent);background:var(--cn-tint);border-radius:5px;padding:0 5px}
 #chigiri-notes .cn-completed-divider{color:var(--cn-soft);font-size:12px;margin:18px 0 0;border-bottom:1px solid var(--cn-line);padding:0 0 6px}
 #chigiri-notes .cn-delete-task{white-space:nowrap;min-width:max-content;border:0;background:none;color:var(--cn-soft);padding:3px 0;font-size:12px}
-#chigiri-notes .cn-delete-task:hover{color:light-dark(#8b3c31,#ffc4b6);text-decoration:underline}
+#chigiri-notes .cn-delete-task:hover{color:var(--cn-theme-delete);text-decoration:underline}
 #chigiri-notes #cn-canvas[data-texture=plain] .cn-scrap{
-  background-image:linear-gradient(145deg,transparent 22%,light-dark(#8b7e5710,#c0bdab0d))
+  background-image:linear-gradient(145deg,transparent 22%,var(--cn-theme-plain-shade))
 }
 #chigiri-notes #cn-canvas[data-texture=fiber] .cn-scrap{
-  background-image:var(--cn-grain),linear-gradient(113deg,light-dark(#fff5,#ffffff09),transparent 48%,light-dark(#5544270d,#0002));background-repeat:repeat,no-repeat
+  background-image:var(--cn-grain),linear-gradient(113deg,var(--cn-theme-fiber-light),transparent 48%,var(--cn-theme-fiber-shade));background-repeat:repeat,no-repeat
 }
 #chigiri-notes #cn-canvas[data-texture=kraft] .cn-scrap{
-  background-color:color-mix(in srgb,light-dark(#c79860,#5e432e) 68%,var(--cn-card-color) 32%);
-  background-image:var(--cn-kraft-grain),linear-gradient(116deg,light-dark(#fff5,#ffffff0b),transparent 47%,light-dark(#78512a28,#0003));
-  background-repeat:repeat,no-repeat;border-color:light-dark(#9e74477a,#a9825b72)
+  background-color:var(--cn-theme-kraft);
+  background-image:var(--cn-kraft-grain),linear-gradient(116deg,var(--cn-theme-kraft-light),transparent 47%,var(--cn-theme-kraft-shade));
+  background-repeat:repeat,no-repeat;border-color:var(--cn-theme-kraft-border)
 }
 #chigiri-notes #cn-canvas[data-texture=kraft] .cn-scrap .cn-grip,
 #chigiri-notes #cn-canvas[data-texture=kraft] .cn-scrap .cn-cardtools button,
-#chigiri-notes #cn-canvas[data-texture=kraft] .cn-scrap[data-done] textarea{color:light-dark(#4f3826,#f1d8be)}
+#chigiri-notes #cn-canvas[data-texture=kraft] .cn-scrap[data-done] textarea{color:var(--cn-theme-kraft-text)}
 @media(max-width:600px){
  #chigiri-notes .cn-columnlabels,#chigiri-notes .cn-row{grid-template-columns:44px minmax(0,1fr) 44px;gap:5px}
  #chigiri-notes .cn-rowmain{flex-wrap:wrap;gap:0 9px}
@@ -208,6 +275,17 @@ body {
  #chigiri-notes #cn-transform [data-handle=rotate]{width:44px;height:44px;top:-46px}
  #chigiri-notes #cn-transform[data-rotator=bottom] [data-handle=rotate]{top:calc(100% + 46px)}
  #chigiri-notes #cn-transform [data-handle=rotate]::after{height:24px}
+}
+@supports (color: color-mix(in srgb, black, white)) {
+  #chigiri-notes .cn-library {
+    background: color-mix(in srgb, var(--cn-tint) 45%, var(--cn-bg));
+  }
+  #chigiri-notes #cn-canvas {
+    background-image: radial-gradient(color-mix(in srgb, var(--cn-ink) 17%, transparent) 1px, transparent 1px);
+  }
+  #chigiri-notes #cn-canvas[data-texture=kraft] .cn-scrap {
+    background-color: color-mix(in srgb, var(--cn-theme-kraft) 68%, var(--cn-card-color) 32%);
+  }
 }
   </style>
 </head>
@@ -529,14 +607,14 @@ body {
     ['#f6ca36', '#f7ce4e'], ['#5bd89b', '#67e4a6'], ['#f58fb4', '#fb9abf']
   ];
   const boardColors = [
-    ['標準', 'var(--cn-bg)'], ['砂色', 'light-dark(#f5ead8,#393026)'],
-    ['ミント', 'light-dark(#e5f1e9,#23352e)'], ['空色', 'light-dark(#e6eff8,#263440)'],
-    ['藤色', 'light-dark(#eee8f7,#372e43)']
+    ['標準', 'var(--cn-bg)'], ['砂色', 'var(--cn-theme-board-sand)'],
+    ['ミント', 'var(--cn-theme-board-mint)'], ['空色', 'var(--cn-theme-board-sky)'],
+    ['藤色', 'var(--cn-theme-board-lavender)']
   ];
   const paperColors = [
-    ['白', 'var(--cn-paper)'], ['黄', 'light-dark(#fff0b9,#41381d)'],
-    ['桃', 'light-dark(#fce1e8,#472d38)'], ['緑', 'light-dark(#dff2dd,#293e2e)'],
-    ['青', 'light-dark(#deedf9,#293849)'], ['紫', 'light-dark(#eee2f9,#3b3048)']
+    ['白', 'var(--cn-paper)'], ['黄', 'var(--cn-theme-card-yellow)'],
+    ['桃', 'var(--cn-theme-card-pink)'], ['緑', 'var(--cn-theme-card-green)'],
+    ['青', 'var(--cn-theme-card-blue)'], ['紫', 'var(--cn-theme-card-purple)']
   ];
   const penLabels = ['深緑','青','朱色'];
   const markerLabels = ['黄色','ミント','ピンク'];
