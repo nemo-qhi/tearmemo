@@ -1,0 +1,107 @@
+<!doctype html>
+<html lang="ja">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="description" content="箇条書きと自由に配置できるボードを切り替えられるメモ帳。">
+  <title>ちぎりノート</title>
+  <link rel="stylesheet" href="./src/styles.css">
+  <script defer src="./src/catalog.js"></script>
+  <script defer src="./src/app.js"></script>
+</head>
+<body>
+<div id="chigiri-notes" aria-label="ちぎりノート">
+  <header class="cn-header"><div class="cn-brand"><span class="cn-mark" aria-hidden="true">c.</span><h2>ちぎりノート</h2></div></header>
+  <div class="cn-workspace">
+  <aside class="cn-library" aria-label="メモ一覧">
+    <div class="cn-library-head"><button type="button" id="cn-library-toggle" aria-expanded="true" aria-controls="cn-notebooks"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M2 6h4"></path><path d="M2 10h4"></path><path d="M2 14h4"></path><path d="M2 18h4"></path><rect width="16" height="20" x="4" y="2" rx="2"></rect><path d="M16 2v20"></path></svg>メモ一覧</button><button type="button" id="cn-new"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M5 12h14"></path><path d="M12 5v14"></path></svg>新規メモ</button></div>
+    <div id="cn-notebooks" aria-label="メモを選ぶ"></div>
+  </aside>
+  <div class="cn-editor">
+  <div class="cn-top"><label class="cn-title-field"><input type="text" id="cn-title" aria-label="メモのタイトル" placeholder="タイトルなし" maxlength="50"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M21.174 6.812a1 1 0 0 0-3.986-3.987L3.842 16.174a2 2 0 0 0-.5.83l-1.321 4.352a.5.5 0 0 0 .623.622l4.353-1.32a2 2 0 0 0 .83-.497z"></path><path d="m15 5 4 4"></path></svg></label><div class="cn-modes" role="tablist" aria-label="メモのモード"><button type="button" id="cn-list-tab" role="tab" aria-controls="cn-list" aria-selected="true"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M3 5h.01"></path><path d="M3 12h.01"></path><path d="M3 19h.01"></path><path d="M8 5h13"></path><path d="M8 12h13"></path><path d="M8 19h13"></path></svg>書く</button><button type="button" id="cn-board-tab" role="tab" aria-controls="cn-board" aria-selected="false"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><rect width="7" height="9" x="3" y="3" rx="1"></rect><rect width="7" height="5" x="14" y="3" rx="1"></rect><rect width="7" height="9" x="14" y="12" rx="1"></rect><rect width="7" height="5" x="3" y="16" rx="1"></rect></svg>ひろげる <span id="cn-count">2</span></button></div></div>
+  <section id="cn-list" role="tabpanel" aria-labelledby="cn-list-tab">
+    <div class="cn-page">
+      <p class="cn-sub cn-list-shortcut">Enterで次の項目</p>
+      <div class="cn-columnlabels" aria-hidden="true"><span>完了</span><span>メモ</span><span>ちぎる</span></div>
+      <div id="cn-rows"></div>
+      <button type="button" class="cn-add" id="cn-add"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M5 12h14"></path><path d="M12 5v14"></path></svg>項目を追加</button>
+    </div>
+    <div class="cn-tearbar"><div class="cn-selection"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><circle cx="6" cy="6" r="3"></circle><path d="M8.12 8.12 12 12"></path><path d="M20 4 8.12 15.88"></path><circle cx="6" cy="18" r="3"></circle><path d="M14.8 14.8 20 20"></path></svg><span id="cn-selected">2件を選択中</span></div><label class="cn-linkchoice"><input type="checkbox" id="cn-link" checked>元のメモと連動</label><button type="button" class="cn-primary" id="cn-tear">選んだメモをちぎる</button></div>
+  </section>
+  <section id="cn-board" role="tabpanel" aria-labelledby="cn-board-tab" hidden>
+    <div class="cn-boardhead">
+      <div class="cn-tools" role="group" aria-label="ボードの道具">
+        <button type="button" data-tool="move" aria-pressed="true"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M12 2v20"></path><path d="m15 19-3 3-3-3"></path><path d="m19 9 3 3-3 3"></path><path d="M2 12h20"></path><path d="m5 9-3 3 3 3"></path><path d="m9 5 3-3 3 3"></path></svg>移動</button>
+        <button type="button" data-tool="connect" aria-pressed="false"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M9 17H7A5 5 0 0 1 7 7h2"></path><path d="M15 7h2a5 5 0 1 1 0 10h-2"></path><line x1="8" x2="16" y1="12" y2="12"></line></svg>つなぐ</button>
+        <button type="button" data-tool="pen" aria-pressed="false"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M13 21h8"></path><path d="M21.174 6.812a1 1 0 0 0-3.986-3.987L3.842 16.174a2 2 0 0 0-.5.83l-1.321 4.352a.5.5 0 0 0 .623.622l4.353-1.32a2 2 0 0 0 .83-.497z"></path></svg>ペン</button>
+        <button type="button" data-tool="marker" aria-pressed="false"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="m9 11-6 6v3h9l3-3"></path><path d="m22 12-4.6 4.6a2 2 0 0 1-2.8 0l-5.2-5.2a2 2 0 0 1 0-2.8L14 4"></path></svg>マーカー</button>
+        <button type="button" data-tool="select" aria-pressed="false"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M4.037 4.688a.495.495 0 0 1 .651-.651l16 6.5a.5.5 0 0 1-.063.947l-6.124 1.58a2 2 0 0 0-1.438 1.435l-1.579 6.126a.5.5 0 0 1-.947.063z"></path></svg>描画を選ぶ</button>
+        <button type="button" data-tool="erase" aria-pressed="false"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M21 21H8a2 2 0 0 1-1.42-.587l-3.994-3.999a2 2 0 0 1 0-2.828l10-10a2 2 0 0 1 2.829 0l5.999 6a2 2 0 0 1 0 2.828L12.834 21"></path><path d="m5.082 11.09 8.828 8.828"></path></svg>消しゴム</button>
+      </div>
+      <div class="cn-palettes">
+        <label class="cn-palette"><span>背景</span><select id="cn-background" aria-label="ボードの背景色"></select></label>
+        <label class="cn-palette"><span>紙の質感</span><select id="cn-texture" aria-label="紙の質感"><option value="plain">標準の紙</option><option value="fiber">繊維のある紙</option><option value="kraft">クラフト紙</option><option value="smooth">なめらか</option></select></label>
+        <label class="cn-palette" id="cn-ink-choice" hidden><span>インク</span><select id="cn-ink-color" aria-label="ペンの色"></select></label>
+        <button type="button" class="cn-decor-toggle" id="cn-decor-toggle" aria-expanded="false" aria-controls="cn-asset-picker"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M21 9a2.4 2.4 0 0 0-.706-1.706l-3.588-3.588A2.4 2.4 0 0 0 15 3H5a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2z"></path><path d="M15 3v5a1 1 0 0 0 1 1h5"></path><path d="M8 13h.01"></path><path d="M16 13h.01"></path><path d="M10 16s.8 1 2 1c1.3 0 2-1 2-1"></path></svg>デコ素材</button>
+      </div>
+    </div>
+    <section id="cn-asset-picker" aria-label="デコ素材を選ぶ" hidden>
+      <label class="cn-palette cn-series-picker"><span>シリーズ</span><select id="cn-asset-series" aria-label="素材のシリーズ">
+        <option value="all">すべて</option><option value="blue">水色の植物</option><option value="sage">セージグリーン</option>
+        <option value="night">ミニマルな夜空</option><option value="lavender">ラベンダーの紙もの</option><option value="pretty">星空の紙もの</option>
+        <option value="existing">前回の素材</option>
+      </select></label>
+      <div class="cn-picker-head">
+        <div class="cn-categories" role="group" aria-label="素材の種類">
+          <button type="button" data-collection="tape" aria-pressed="true">固定用テープ</button>
+          <button type="button" data-collection="paper" aria-pressed="false">紙もの</button>
+          <button type="button" data-collection="motif" aria-pressed="false">モチーフ</button>
+          <button type="button" data-collection="wash" aria-pressed="false">水彩</button>
+        </div>
+        <div class="cn-picker-pages" id="cn-picker-pages">
+          <button type="button" id="cn-assets-prev" aria-label="前の素材ページ">前へ</button>
+          <span id="cn-assets-page" aria-live="polite"></span>
+          <button type="button" id="cn-assets-next" aria-label="次の素材ページ">次へ</button>
+        </div>
+      </div>
+      <div id="cn-asset-grid"></div>
+      <p class="cn-assets-credit" id="cn-tape-hint">テープをカードに重ねて離すと、その場に固定できます。</p>
+      <div class="cn-sub cn-assets-credit" id="cn-assets-credit" hidden>水彩素材の元画像表記：AqwaColor</div>
+    </section>
+    <p class="cn-boardhint" id="cn-boardhint" aria-live="polite"></p>
+    <div class="cn-inspector" id="cn-size-inspector" role="group" aria-label="カードのサイズと回転" hidden>
+      <label class="cn-palette"><span>形</span><select id="cn-card-shape" aria-label="カードの形"><option value="standard">標準</option><option value="portrait">縦長</option><option value="landscape">横長</option><option value="custom" disabled>カスタム</option></select></label>
+      <label class="cn-range"><span>幅 <output id="cn-card-width-value"></output></span><input id="cn-card-width" type="range" aria-label="カードの幅" min="175" max="440" step="1"></label>
+      <label class="cn-range"><span>高さ <output id="cn-card-height-value"></output></span><input id="cn-card-height" type="range" aria-label="カードの高さ" min="160" max="420" step="1"></label>
+      <label class="cn-range"><span>角度 <output id="cn-card-angle-value"></output></span><input id="cn-card-angle" type="range" aria-label="カードの回転角度" min="-180" max="180" step="1"></label>
+      <button type="button" class="cn-inspector-close" id="cn-size-close" aria-label="カードのサイズ調整を閉じる">閉じる</button>
+    </div>
+    <div class="cn-inspector" id="cn-decor-inspector" role="group" aria-label="デコ素材の調整" hidden>
+      <span id="cn-decor-name"></span>
+      <label class="cn-range"><span>大きさ <output id="cn-decor-size-value"></output></span><input id="cn-decor-size" type="range" min="30" max="260" step="1" aria-label="素材の大きさ"></label>
+      <label class="cn-range"><span>角度 <output id="cn-decor-angle-value"></output></span><input id="cn-decor-angle" type="range" min="-180" max="180" step="1" aria-label="素材の回転角度"></label>
+      <span class="cn-pin-actions" id="cn-pin-actions" hidden>
+        <select id="cn-pin-target" aria-label="固定するカード"><option value="">固定先を選ぶ</option></select>
+        <button type="button" id="cn-pin-attach" disabled>固定する</button>
+      </span>
+      <button type="button" id="cn-unpin" hidden>固定を解除</button>
+      <button type="button" id="cn-decor-remove">素材を外す</button>
+      <button type="button" class="cn-inspector-close" id="cn-decor-close" aria-label="素材の調整を閉じる">閉じる</button>
+    </div>
+    <div id="cn-canvas" data-tool="move" aria-label="メモを自由に配置するボード">
+      <canvas id="cn-wires" aria-hidden="true"></canvas><div id="cn-cards"></div><div id="cn-decorations" aria-label="貼った素材"></div><div id="cn-ink-objects" aria-hidden="true"></div><canvas id="cn-ink" role="img" aria-label="手書きのレイヤー"></canvas>
+      <div id="cn-transform" role="group" aria-label="選択したものの調整ハンドル" hidden>
+        <button type="button" data-handle="nw" aria-label="左上の角でサイズ変更" data-tooltip="サイズ変更"></button>
+        <button type="button" data-handle="ne" aria-label="右上の角でサイズ変更" data-tooltip="サイズ変更"></button>
+        <button type="button" data-handle="sw" aria-label="左下の角でサイズ変更" data-tooltip="サイズ変更"></button>
+        <button type="button" data-handle="se" aria-label="右下の角でサイズ変更" data-tooltip="サイズ変更"></button>
+        <button type="button" data-handle="rotate" aria-label="回転ハンドル" data-tooltip="回転"><span aria-hidden="true">↻</span></button>
+      </div>
+    </div>
+  </section>
+  <footer class="cn-footer"><span id="cn-status" role="status" aria-live="polite"></span><button type="button" id="cn-undo" disabled>元に戻す</button></footer>
+  </div>
+  </div>
+</div>
+</body>
+</html>
