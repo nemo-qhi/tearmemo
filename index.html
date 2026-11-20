@@ -287,6 +287,87 @@ body {
     background-color: color-mix(in srgb, var(--cn-theme-kraft) 68%, var(--cn-card-color) 32%);
   }
 }
+
+#chigiri-notes .cn-library-actions,
+#chigiri-notes #cn-bulk-actions,
+#chigiri-notes .cn-view-tools {
+  display:flex;
+  align-items:center;
+  flex-wrap:wrap;
+  gap:6px;
+}
+#chigiri-notes .cn-library-actions {
+  justify-content:flex-end;
+  margin:6px 0;
+  font-size:13px;
+}
+#chigiri-notes #cn-bulk-count { color:var(--cn-soft); }
+#chigiri-notes .cn-library-actions button,
+#chigiri-notes .cn-view-tools button {
+  border:1px solid var(--cn-line);
+  border-radius:8px;
+  background:var(--cn-paper);
+  padding:5px 10px;
+}
+#chigiri-notes #cn-bulk-select[aria-pressed=true] { background:var(--cn-tint); }
+#chigiri-notes #cn-bulk-delete { color:var(--cn-theme-delete); }
+#chigiri-notes .cn-notebook-option {
+  display:flex;
+  flex-direction:row;
+  align-items:center;
+  gap:7px;
+  cursor:pointer;
+}
+#chigiri-notes .cn-notebook-option:has(input:checked) {
+  border-color:var(--cn-line);
+  background:var(--cn-tint);
+}
+#chigiri-notes .cn-notebook-option input {
+  flex:none;
+  accent-color:var(--cn-accent);
+  cursor:pointer;
+}
+#chigiri-notes .cn-notebook-option-text {
+  display:flex;
+  flex-direction:column;
+  min-width:0;
+}
+#chigiri-notes #cn-notebooks {
+  max-height:min(48vh, 440px);
+  overflow:auto;
+}
+#chigiri-notes .cn-view-tools {
+  justify-content:flex-end;
+  margin:0 20px 8px;
+  font-size:13px;
+}
+#chigiri-notes .cn-view-tools button { min-width:36px; }
+#chigiri-notes #cn-zoom-reset { min-width:58px; font-variant-numeric:tabular-nums; }
+#chigiri-notes #cn-viewport {
+  position:relative;
+  margin:0 20px 20px;
+  height:clamp(350px, 58vh, 620px);
+  overflow:auto;
+  border:1px solid var(--cn-line);
+  border-radius:9px;
+  background:var(--cn-board-color,var(--cn-bg));
+  touch-action:none;
+}
+#chigiri-notes #cn-viewport:focus-visible { outline:2px solid var(--cn-accent); outline-offset:2px; }
+#chigiri-notes #cn-viewport[data-panning] { cursor:grabbing; user-select:none; }
+#chigiri-notes #cn-field { position:relative; overflow:hidden; }
+#chigiri-notes #cn-canvas {
+  position:absolute;
+  inset:0 auto auto 0;
+  margin:0;
+  border:0;
+  border-radius:0;
+  transform-origin:0 0;
+}
+@media(max-width:600px) {
+  #chigiri-notes #cn-viewport { margin:0 10px 16px; }
+  #chigiri-notes .cn-view-tools { margin-inline:10px; }
+}
   </style>
 </head>
 <body>
@@ -295,7 +376,16 @@ body {
   <div class="cn-workspace">
   <aside class="cn-library" aria-label="メモ一覧">
     <div class="cn-library-head"><button type="button" id="cn-library-toggle" aria-expanded="true" aria-controls="cn-notebooks"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M2 6h4"></path><path d="M2 10h4"></path><path d="M2 14h4"></path><path d="M2 18h4"></path><rect width="16" height="20" x="4" y="2" rx="2"></rect><path d="M16 2v20"></path></svg>メモ一覧</button><button type="button" id="cn-new"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M5 12h14"></path><path d="M12 5v14"></path></svg>新規メモ</button></div>
-    <div id="cn-notebooks" aria-label="メモを選ぶ"></div>
+    <div id="cn-library-panel">
+      <div class="cn-library-actions">
+        <button type="button" id="cn-bulk-select" aria-pressed="false">選択</button>
+        <div id="cn-bulk-actions" hidden>
+          <span id="cn-bulk-count" aria-live="polite"></span>
+          <button type="button" id="cn-bulk-delete" disabled>削除</button>
+        </div>
+      </div>
+      <div id="cn-notebooks" aria-label="メモを選ぶ"></div>
+    </div>
   </aside>
   <div class="cn-editor">
   <div class="cn-top"><label class="cn-title-field"><input type="text" id="cn-title" aria-label="メモのタイトル" placeholder="タイトルなし" maxlength="50"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M21.174 6.812a1 1 0 0 0-3.986-3.987L3.842 16.174a2 2 0 0 0-.5.83l-1.321 4.352a.5.5 0 0 0 .623.622l4.353-1.32a2 2 0 0 0 .83-.497z"></path><path d="m15 5 4 4"></path></svg></label><div class="cn-modes" role="tablist" aria-label="メモのモード"><button type="button" id="cn-list-tab" role="tab" aria-controls="cn-list" aria-selected="true"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M3 5h.01"></path><path d="M3 12h.01"></path><path d="M3 19h.01"></path><path d="M8 5h13"></path><path d="M8 12h13"></path><path d="M8 19h13"></path></svg>書く</button><button type="button" id="cn-board-tab" role="tab" aria-controls="cn-board" aria-selected="false"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><rect width="7" height="9" x="3" y="3" rx="1"></rect><rect width="7" height="5" x="14" y="3" rx="1"></rect><rect width="7" height="9" x="14" y="12" rx="1"></rect><rect width="7" height="5" x="3" y="16" rx="1"></rect></svg>ひろげる <span id="cn-count">2</span></button></div></div>
@@ -368,6 +458,14 @@ body {
       <button type="button" id="cn-decor-remove">素材を外す</button>
       <button type="button" class="cn-inspector-close" id="cn-decor-close" aria-label="素材の調整を閉じる">閉じる</button>
     </div>
+    <div class="cn-view-tools" role="group" aria-label="ボードの表示">
+      <button type="button" id="cn-zoom-out" aria-label="ボードを縮小">−</button>
+      <button type="button" id="cn-zoom-reset" aria-label="ボードの倍率を100パーセントに戻す" title="倍率を戻す">100%</button>
+      <button type="button" id="cn-zoom-in" aria-label="ボードを拡大">＋</button>
+      <button type="button" id="cn-zoom-fit">全体表示</button>
+    </div>
+    <div id="cn-viewport" role="region" aria-label="ボードの表示範囲" tabindex="0">
+    <div id="cn-field">
     <div id="cn-canvas" data-tool="move" aria-label="メモを自由に配置するボード">
       <canvas id="cn-wires" aria-hidden="true"></canvas><div id="cn-cards"></div><div id="cn-decorations" aria-label="貼った素材"></div><div id="cn-ink-objects" aria-hidden="true"></div><canvas id="cn-ink" role="img" aria-label="手書きのレイヤー"></canvas>
       <div id="cn-transform" role="group" aria-label="選択したものの調整ハンドル" hidden>
@@ -377,6 +475,8 @@ body {
         <button type="button" data-handle="se" aria-label="右下の角でサイズ変更" data-tooltip="サイズ変更"></button>
         <button type="button" data-handle="rotate" aria-label="回転ハンドル" data-tooltip="回転"><span aria-hidden="true">↻</span></button>
       </div>
+    </div>
+    </div>
     </div>
   </section>
   <footer class="cn-footer"><span id="cn-status" role="status" aria-live="polite"></span><button type="button" id="cn-undo" disabled>元に戻す</button></footer>
@@ -588,11 +688,15 @@ body {
   const query = selector => root.querySelector(selector);
   const rows = query('#cn-rows');
   const board = query('#cn-canvas');
+  const viewport = query('#cn-viewport');
+  const field = query('#cn-field');
   const cards = query('#cn-cards');
   const ink = query('#cn-ink');
   const wires = query('#cn-wires');
   const title = query('#cn-title');
   const library = query('#cn-notebooks');
+  const libraryToggle = query('#cn-library-toggle');
+  const libraryPanel = query('#cn-library-panel');
   const color = query('#cn-ink-color');
   const background = query('#cn-background');
   const texture = query('#cn-texture');
@@ -666,7 +770,7 @@ body {
   const current = () => workspace.notebooks.find(note => note.id === workspace.active);
   const undo = new Map();
   const hints = {
-    move:'カードの余白や素材を押すと調整枠が出ます。ドラッグで移動できます。',
+    move:'カードの余白や素材を押すと調整枠が出ます。ボードの空白をドラッグすると見える範囲を移動できます。',
     connect:'線で結びたいカードを2枚選びます。同じ組み合わせを選ぶと線を外せます。',
     pen:'カードの上から描くとカードに付き、余白から描くと独立します。',
     marker:'半透明のインクで、文字の上にも線を引けます。',
@@ -682,6 +786,7 @@ body {
   let drag = null;
   let saveTimer = null;
   let libraryOverride;
+  let selectedNotebooks = null;
 
   function element(tag, className, value) {
     const node = document.createElement(tag);
@@ -704,7 +809,7 @@ body {
     const swatch = boardColors[shade][1];
     background.value = String(shade);
     background.style.setProperty('--cn-swatch',swatch);
-    board.style.setProperty('--cn-board-color',swatch);
+    viewport.style.setProperty('--cn-board-color',swatch);
   }
 
   function seededRandom(seed) {
@@ -771,6 +876,7 @@ body {
   };
 
   function persist(delayed = false) {
+    if (moveCurrentToTop()) renderLibrary();
     clearTimeout(saveTimer);
     if (delayed) {
       saveTimer = setTimeout(persist, 300);
@@ -778,10 +884,19 @@ body {
     }
     saveTimer = null;
     try {
+      workspace.views = Object.fromEntries(cameras);
       localStorage.setItem(storageKey, JSON.stringify(workspace));
     } catch {
       status('変更を保存できませんでした。この画面では引き続き編集できます。');
     }
+  }
+
+  function moveCurrentToTop() {
+    const index = workspace.notebooks.findIndex(note => note.id === workspace.active);
+    if (index < 1) return false;
+    const [note] = workspace.notebooks.splice(index,1);
+    workspace.notebooks.unshift(note);
+    return true;
   }
 
   function backup(snapshot = clone(current())) {
@@ -803,15 +918,36 @@ body {
   function renderLibrary() {
     library.replaceChildren();
     for (const note of workspace.notebooks) {
+      const name = note.title.trim() || 'タイトルなし';
+      const preview = previewText(note);
+      if (selectedNotebooks) {
+        const option = element('label','cn-notebook cn-notebook-option');
+        option.dataset.noteId = note.id;
+        const checkbox = element('input');
+        checkbox.type = 'checkbox';
+        checkbox.setAttribute('aria-label',name + 'を選択');
+        checkbox.checked = selectedNotebooks.has(note.id);
+        checkbox.onchange = () => {
+          if (checkbox.checked) selectedNotebooks.add(note.id);
+          else selectedNotebooks.delete(note.id);
+          updateBulkActions();
+        };
+        const text = element('span','cn-notebook-option-text');
+        text.append(element('span','cn-notebook-title',name),element('span','cn-notebook-preview',preview));
+        option.append(checkbox,text);
+        library.append(option);
+        continue;
+      }
       const button = element('button', 'cn-notebook');
       button.type = 'button';
       button.dataset.noteId = note.id;
       if (note.id === workspace.active) button.setAttribute('aria-current', 'true');
-      button.append(element('span', '', note.title.trim() || 'タイトルなし'),
-        element('span', '', previewText(note)));
+      button.append(element('span','cn-notebook-title',name),element('span','cn-notebook-preview',preview));
       button.onclick = () => {
         if (workspace.active !== note.id) {
+          rememberCamera();
           workspace.active = note.id;
+          moveCurrentToTop();
           setTool('move');
           render();
           status('');
@@ -820,7 +956,7 @@ body {
         if (compact.matches) {
           libraryOverride = false;
           renderLibraryVisibility();
-          query('#cn-library-toggle').focus();
+          libraryToggle.focus();
         } else {
           library.querySelector('[aria-current]').focus();
         }
@@ -828,25 +964,71 @@ body {
       library.append(button);
     }
     query('#cn-new').disabled = workspace.notebooks.length >= 8;
+    updateBulkActions();
   }
 
+  function updateBulkActions() {
+    const select = query('#cn-bulk-select');
+    const count = selectedNotebooks?.size ?? 0;
+    select.textContent = selectedNotebooks ? 'キャンセル' : '選択';
+    select.setAttribute('aria-pressed',String(Boolean(selectedNotebooks)));
+    query('#cn-bulk-actions').hidden = !selectedNotebooks;
+    query('#cn-bulk-count').textContent = count + '件選択';
+    query('#cn-bulk-delete').disabled = count === 0;
+  }
+
+  query('#cn-bulk-select').onclick = () => {
+    selectedNotebooks = selectedNotebooks ? null : new Set();
+    renderLibrary();
+  };
+  query('#cn-bulk-delete').onclick = () => {
+    const removed = selectedNotebooks;
+    if (!removed?.size || !window.confirm(removed.size + '件のメモを削除しますか？')) return;
+    rememberCamera();
+    workspace.notebooks = workspace.notebooks.filter(note => !removed.has(note.id));
+    for (const id of removed) {
+      undo.delete(id);
+      cameras.delete(id);
+    }
+    selectedNotebooks = null;
+    if (!workspace.notebooks.length) workspace.notebooks.push(blankNotebook());
+    if (removed.has(workspace.active)) {
+      workspace.active = workspace.notebooks[0].id;
+      setTool('move');
+      render();
+    } else {
+      renderLibrary();
+    }
+    query('#cn-bulk-select').focus();
+    status(removed.size + '件のメモを削除しました。');
+    persist();
+  };
+
   const compact = matchMedia('(max-width: 720px)');
+  libraryToggle.setAttribute('aria-controls',libraryPanel.id);
   function renderLibraryVisibility() {
     const show = libraryOverride ?? !compact.matches;
-    library.hidden = !show;
-    query('#cn-library-toggle').setAttribute('aria-expanded', String(show));
+    libraryPanel.hidden = !show;
+    libraryToggle.setAttribute('aria-expanded',String(show));
   }
   compact.addEventListener('change', () => {
     libraryOverride = undefined;
     renderLibraryVisibility();
   });
-  query('#cn-library-toggle').onclick = () => {
-    libraryOverride = library.hidden;
+  libraryToggle.onclick = () => {
+    libraryOverride = libraryPanel.hidden;
     renderLibraryVisibility();
   };
-  query('#cn-new').onclick = () => {
+  function blankNotebook() {
     const note = createNote(uid(), 'タイトルなし');
     note.notes.push({id:uid(), text:''});
+    return note;
+  }
+
+  query('#cn-new').onclick = () => {
+    rememberCamera();
+    selectedNotebooks = null;
+    const note = blankNotebook();
     workspace.notebooks.unshift(note);
     workspace.active = note.id;
     setTool('move');
@@ -858,8 +1040,10 @@ body {
   };
   recordEditing(title, value => {
     current().title = value;
-    const label = library.querySelector('[aria-current] span');
+    const option = library.querySelector('[data-note-id="'+workspace.active+'"]');
+    const label = option?.querySelector('.cn-notebook-title');
     if (label) label.textContent = value.trim() || 'タイトルなし';
+    option?.querySelector('input')?.setAttribute('aria-label',(value.trim() || 'タイトルなし')+'を選択');
   });
   title.addEventListener('keydown', event => {
     if (event.key === 'Enter' && !event.isComposing) {
@@ -899,7 +1083,7 @@ body {
   }
 
   function updatePreview() {
-    const preview = library.querySelector('[aria-current] span:last-child');
+    const preview = library.querySelector('[data-note-id="'+workspace.active+'"] .cn-notebook-preview');
     if (preview) preview.textContent = previewText(current());
   }
 
@@ -1235,8 +1419,8 @@ body {
       drag.moved = true;
       paper.setAttribute('data-moving','');
       const range = Math.max(1,board.clientWidth - (paperPoses.get(paper)?.w ?? paper.offsetWidth));
-      card.x = clamp(drag.x + dx / range,0,1);
-      card.y = clamp(drag.y + dy,0,3900);
+      card.x = clamp(drag.x + dx / boardScale / range,0,1);
+      card.y = clamp(drag.y + dy / boardScale,0,3900);
       layout();
     };
     const end = event => {
@@ -1272,9 +1456,10 @@ body {
   }
 
   function layout() {
+    if (!viewport.clientWidth) return;
+    board.style.width = boardWidth() + 'px';
     const width = board.clientWidth;
-    if (!width) return;
-    let height = 430;
+    let height = Math.max(430,viewport.clientHeight,current().fieldWidth ? 1100 : 0);
     const byId = new Map(current().cards.map(card => [card.id,card]));
     for (const paper of cards.querySelectorAll('.cn-scrap')) {
       const card = byId.get(paper.dataset.id);
@@ -1295,14 +1480,15 @@ body {
         height = Math.max(height,parseInt(path.slice(index,index+3),36) + dy + 16);
       }
     }
-    board.style.height = height + 2 + 'px';
+    board.style.height = height + 'px';
+    sizeField();
     paint();
   }
 
   function fitCanvas(canvas) {
-    const scale = Math.min(devicePixelRatio || 1,2);
     const width = canvas.clientWidth;
     const height = canvas.clientHeight;
+    const scale = Math.min(devicePixelRatio || 1,2,Math.sqrt(5000000/Math.max(1,width*height)));
     const w = Math.round(width * scale);
     const h = Math.round(height * scale);
     if (canvas.width !== w) canvas.width = w;
@@ -1321,7 +1507,7 @@ body {
     for (let index = 0; index < path.length; index += 5) {
       const x = parseInt(path.slice(index,index+2),36);
       const y = parseInt(path.slice(index+2,index+5),36);
-      points.push(card ? [(x-300)*width/600,y-300] : [(x+dx)*width/1000,y+dy]);
+      points.push(card ? [(x-300)*width/600,y-300] : [(x+dx)*(mark.space ?? width)/1000,y+dy]);
     }
     return points;
   }
@@ -1414,7 +1600,7 @@ body {
     const pose = paperPoses.get(layer.parentElement);
     if (pose) {
       const bounds = ink.getBoundingClientRect();
-      const local = turnPoint(x-bounds.left-pose.x,y-bounds.top-pose.y,-pose.angle);
+      const local = turnPoint((x-bounds.left)/boardScale-pose.x,(y-bounds.top)/boardScale-pose.y,-pose.angle);
       return [local[0]/pose.scale+layer.clientWidth/2,local[1]/pose.scale+layer.clientHeight/2];
     }
     const bounds = layer.getBoundingClientRect();
@@ -1470,8 +1656,7 @@ body {
   }
 
   function beginInkMove(event) {
-    const bounds = ink.getBoundingClientRect();
-    const point = [event.clientX-bounds.left,event.clientY-bounds.top];
+    const point = canvasPosition(ink,event.clientX,event.clientY);
     const free = current().strokes.filter(mark => !mark.card);
     let hit = free.sort((a,b)=>boardObjectLayer(b)-boardObjectLayer(a)).find(mark => nearMark(point,mark));
     const previous = free.find(mark => mark.id === selectedInk);
@@ -1498,8 +1683,8 @@ body {
     ink.dataset.dragging = '';
     const [left,top,right,bottom] = inkDrag.bounds;
     const width = board.clientWidth;
-    inkDrag.mark.dx = inkDrag.dx + Math.round(clamp(dx,-left,width-right)*1000/width);
-    inkDrag.mark.dy = inkDrag.dy + Math.round(clamp(dy,-top,4200-bottom));
+    inkDrag.mark.dx = inkDrag.dx + Math.round(clamp(dx/boardScale,-left,width-right)*1000/(inkDrag.mark.space ?? width));
+    inkDrag.mark.dy = inkDrag.dy + Math.round(clamp(dy/boardScale,-top,4200-bottom));
     layout();
   }
 
@@ -1517,6 +1702,8 @@ body {
       mark.card = paper.dataset.id;
       const card = current().cards.find(item=>item.id===mark.card);
       if (card) touchBoardItem(card);
+    } else if (current().fieldWidth) {
+      mark.space = board.clientWidth;
     }
     stroke = {id:event.pointerId,kind:tool,mark,layer:paper?.querySelector('.cn-paper-ink') || ink,last:null,changed:false};
     ink.setPointerCapture(event.pointerId);
@@ -1552,7 +1739,7 @@ body {
   ink.onlostpointercapture = finishInk;
 
   function placeCard(note,item) {
-    const space = query('.cn-editor').clientWidth - 44;
+    const space = boardWidth();
     const width = Math.min(236,space-20);
     const padding = window.matchMedia('(pointer: coarse)').matches ? 86 : 28;
     const gap = 190 + padding;
@@ -1577,6 +1764,7 @@ body {
     if (item.done && !note.link) card.done = true;
     note.cards.push(card);
     setTopLayer(card);
+    return card;
   }
 
   query('#cn-tear').onclick = () => {
@@ -1588,13 +1776,27 @@ body {
       return;
     }
     backup();
-    for (const item of picked) placeCard(note,item);
+    const added = picked.map(item=>placeCard(note,item));
     const pickedIds = new Set(picked.map(item => item.id));
     note.selected = note.selected.filter(id => !pickedIds.has(id));
     setTool('move');
     renderRows();
     renderCards();
     setMode('board');
+    restoreCamera();
+    requestAnimationFrame(()=>{
+      if (current() !== note || note.mode !== 'board') return;
+      const pose = paperPoses.get(cardPaper(added[0].id));
+      if (!pose) return;
+      const left = (pose.x-pose.radiusX)*boardScale;
+      const right = (pose.x+pose.radiusX)*boardScale;
+      const top = (pose.y-pose.radiusY)*boardScale;
+      const bottom = (pose.y+pose.radiusY)*boardScale;
+      if (left < viewport.scrollLeft || right > viewport.scrollLeft+viewport.clientWidth ||
+          top < viewport.scrollTop || bottom > viewport.scrollTop+viewport.clientHeight) {
+        viewport.scrollTo(pose.x*boardScale-viewport.clientWidth/2,pose.y*boardScale-viewport.clientHeight/2);
+      }
+    });
     query('#cn-board-tab').focus();
     status(picked.length + '件をボードに置きました。');
     persist();
@@ -1605,7 +1807,9 @@ body {
   };
   query('#cn-add').onclick = () => add();
   function changeMode(mode) {
+    rememberCamera();
     setMode(mode);
+    if (mode === 'board') restoreCamera();
     if (mode === 'list') setTool('move');
     status('');
     persist();
@@ -1638,6 +1842,7 @@ body {
   };
 
   function render() {
+    moveCurrentToTop();
     title.value = current().title;
     query('#cn-link').checked = current().link;
     query('#cn-undo').disabled = !undo.has(current().id);
@@ -1649,6 +1854,7 @@ body {
     applyBackground();
     applyTexture();
     setMode(current().mode);
+    restoreCamera();
   }
 
   const vectorAssets = JSON.parse(document.getElementById('cn-vector-data').textContent)
@@ -2300,10 +2506,13 @@ body {
     const width = board.clientWidth;
     const isTape = tapeAssets.has(asset.id);
     const piece = {id:uid(),asset:asset.id,size:isTape ? 96 : 112,angle:0,x:.5,y:90,layer:topBoardLayer()+2};
+    const origin = ink.getBoundingClientRect();
     const occupied = [...cards.querySelectorAll('.cn-scrap'),...decorLayer.children].map(node=>{
       const box = node.getBoundingClientRect();
-      const origin = board.getBoundingClientRect();
-      return {left:box.left-origin.left,right:box.right-origin.left,top:box.top-origin.top,bottom:box.bottom-origin.top};
+      return {
+        left:(box.left-origin.left)/boardScale,right:(box.right-origin.left)/boardScale,
+        top:(box.top-origin.top)/boardScale,bottom:(box.bottom-origin.top)/boardScale
+      };
     });
     const open = (x,y) => {
       const box = decorationBox({...piece,x,y},width);
@@ -2312,7 +2521,14 @@ body {
     };
     const candidates = [90,234,350,Math.max(410,...occupied.map(area=>area.bottom+75))]
       .flatMap(y=>[.5,.72,.27,.88,.13].map(x=>({x,y})));
-    const slot = candidates.find(({x,y})=>open(x,y));
+    const viewingWideField = Boolean(note.fieldWidth) || boardScale !== 1 || viewport.scrollTop > 0;
+    if (viewingWideField) {
+      const x = clamp((viewport.scrollLeft+viewport.clientWidth/2)/boardScale/width,0,1);
+      const y = clamp((viewport.scrollTop+viewport.clientHeight/2)/boardScale,0,4200);
+      candidates.unshift({x,y},{x,y:y+100},{x,y:Math.max(0,y-100)});
+      Object.assign(piece,{x,y});
+    }
+    const slot = candidates.find(({x,y})=>y <= 4200 && open(x,y));
     if (slot) Object.assign(piece,slot);
     note.decorations.push(piece);
     setTool('move');
@@ -2368,7 +2584,7 @@ body {
       if (!gesture.moved) backup();
       gesture.moved = true;
       const width = board.clientWidth;
-      const place = decorationBox({...piece,x:(gesture.x+dx)/width,y:clamp(gesture.y+dy,0,4200)},width);
+      const place = decorationBox({...piece,x:(gesture.x+dx/boardScale)/width,y:clamp(gesture.y+dy/boardScale,0,4200)},width);
       piece.x = place.x/width;
       piece.y = place.y;
       layout();
@@ -2594,8 +2810,8 @@ body {
       const object = transformStart();
       if (!object) return;
       const bounds = ink.getBoundingClientRect();
-      const centerX = bounds.left+object.pose.x;
-      const centerY = bounds.top+object.pose.y;
+      const centerX = bounds.left+object.pose.x*boardScale;
+      const centerY = bounds.top+object.pose.y*boardScale;
       transformGesture = {object,id:event.pointerId,x:event.clientX,y:event.clientY,centerX,centerY,
         turn:Math.atan2(event.clientY-centerY,event.clientX-centerX),moved:false};
       button.setPointerCapture(event.pointerId);
@@ -2613,7 +2829,7 @@ body {
         const adjusted = event.shiftKey ? Math.round((gesture.object.pose.angle+angle)/15)*15-gesture.object.pose.angle : angle;
         transformSelection(gesture.object,handle,0,0,adjusted);
       } else {
-        const local = turnPoint(dx,dy,-gesture.object.pose.angle);
+        const local = turnPoint(dx/boardScale,dy/boardScale,-gesture.object.pose.angle);
         transformSelection(gesture.object,handle,...local);
       }
     };
@@ -2647,8 +2863,205 @@ body {
     updateInspectors();
     layout();
   });
+
+  const cameras = new Map(Object.entries(workspace.views || {}));
+  const zoomSteps = [.075,.1,.15,.2,.25,.33,.5,.67,.8,1,1.25,1.5,2];
+  let boardScale = 1;
+  let pan = null;
+  let pinch = null;
+  const boardTouches = new Map();
+
+  function boardWidth() {
+    const fieldWidth = current().fieldWidth;
+    if (fieldWidth) return fieldWidth;
+    const editorWidth = query('.cn-editor').clientWidth;
+    return Math.max(175,viewport.clientWidth || editorWidth-(smallBoard.matches ? 22 : 42));
+  }
+
+  function sizeField() {
+    board.style.transform = 'scale('+boardScale+')';
+    field.style.width = Math.ceil(board.offsetWidth*boardScale)+'px';
+    field.style.height = Math.ceil(board.offsetHeight*boardScale)+'px';
+  }
+
+  function rememberCamera() {
+    if (!viewport.clientWidth) return;
+    cameras.set(workspace.active,{scale:boardScale,left:viewport.scrollLeft,top:viewport.scrollTop});
+  }
+
+  function updateZoomControls() {
+    const percent = Math.round(boardScale*100);
+    const reset = query('#cn-zoom-reset');
+    reset.textContent = percent+'%';
+    reset.setAttribute('aria-label','現在の倍率は'+percent+'パーセント。100パーセントに戻す');
+    query('#cn-zoom-out').disabled = boardScale <= zoomSteps[0];
+    query('#cn-zoom-in').disabled = boardScale >= zoomSteps[zoomSteps.length-1];
+  }
+
+  function restoreCamera() {
+    const id = workspace.active;
+    const view = cameras.get(id);
+    boardScale = view?.scale ?? 1;
+    updateZoomControls();
+    if (current().mode !== 'board') return;
+    requestAnimationFrame(() => {
+      if (workspace.active !== id || current().mode !== 'board') return;
+      layout();
+      viewport.scrollTo(view?.left ?? 0,view?.top ?? 0);
+    });
+  }
+
+  function expandField() {
+    const note = current();
+    if (note.fieldWidth) return;
+    const previousWidth = board.clientWidth;
+    if (!previousWidth) return;
+    note.fieldWidth = Math.max(1440,Math.ceil(previousWidth*1.25));
+    for (const card of note.cards) {
+      const paper = cardPaper(card.id);
+      const previous = paper && paperPoses.get(paper);
+      if (!previous) continue;
+      const expanded = paperPose(paper,card,note.fieldWidth);
+      const left = previous.x-expanded.w/2;
+      card.x = clamp(left/Math.max(1,note.fieldWidth-expanded.w),0,1);
+      if (Number.isFinite(card.anchorX)) card.anchorX = clamp(left/note.fieldWidth,0,1);
+    }
+    for (const piece of note.decorations || []) {
+      piece.x = decorationBox(piece,previousWidth).x/note.fieldWidth;
+    }
+    for (const mark of note.strokes) {
+      if (!mark.card) mark.space ??= previousWidth;
+    }
+    layout();
+  }
+
+  function boardAnchor(point) {
+    return [(viewport.scrollLeft+point[0])/boardScale,(viewport.scrollTop+point[1])/boardScale];
+  }
+
+  function viewportPoint(clientX,clientY) {
+    const bounds = viewport.getBoundingClientRect();
+    return [clientX-bounds.left-viewport.clientLeft,clientY-bounds.top-viewport.clientTop];
+  }
+
+  function setZoom(scale,{point = [viewport.clientWidth/2,viewport.clientHeight/2],
+    anchor = boardAnchor(point),expand = true} = {}) {
+    scale = clamp(scale,zoomSteps[0],zoomSteps[zoomSteps.length-1]);
+    if (expand && scale < 1 && scale < boardScale) expandField();
+    boardScale = scale;
+    sizeField();
+    viewport.scrollTo(anchor[0]*scale-point[0],anchor[1]*scale-point[1]);
+    updateZoomControls();
+    rememberCamera();
+    persist(true);
+  }
+
+  function stepZoom(direction) {
+    const step = direction > 0 ? zoomSteps.find(value=>value > boardScale+.001) :
+      [...zoomSteps].reverse().find(value=>value < boardScale-.001);
+    if (step !== undefined) setZoom(step);
+  }
+
+  query('#cn-zoom-out').onclick = () => stepZoom(-1);
+  query('#cn-zoom-in').onclick = () => stepZoom(1);
+  query('#cn-zoom-reset').onclick = () => setZoom(1);
+  query('#cn-zoom-fit').onclick = () => {
+    const ratio = Math.min(1,viewport.clientWidth/board.offsetWidth,viewport.clientHeight/board.offsetHeight);
+    setZoom(ratio,{point:[0,0],anchor:[0,0],expand:false});
+  };
+  viewport.addEventListener('wheel',event=>{
+    if ((!event.ctrlKey && !event.metaKey) || drag || stroke || transformGesture || inkDrag || pan) return;
+    event.preventDefault();
+    const distance = event.deltaY * (event.deltaMode ? 12 : 1);
+    setZoom(boardScale*Math.exp(-distance*.004),{point:viewportPoint(event.clientX,event.clientY)});
+  },{passive:false});
+  viewport.addEventListener('keydown',event=>{
+    if (event.target !== viewport) return;
+    const offset = {ArrowLeft:[-48,0],ArrowRight:[48,0],ArrowUp:[0,-48],ArrowDown:[0,48]}[event.key];
+    if (offset) viewport.scrollBy(...offset);
+    else if (event.key === '+' || event.key === '=') stepZoom(1);
+    else if (event.key === '-') stepZoom(-1);
+    else if (event.key === '0') setZoom(1);
+    else return;
+    event.preventDefault();
+  });
+  viewport.addEventListener('scroll',()=>{
+    rememberCamera();
+    persist(true);
+  },{passive:true});
+
+  function touchGeometry() {
+    const [a,b] = boardTouches.values();
+    return {distance:Math.hypot(a.x-b.x,a.y-b.y),
+      point:viewportPoint((a.x+b.x)/2,(a.y+b.y)/2)};
+  }
+
+  function capturePinch(event) {
+    for (const [id,touch] of boardTouches) {
+      let target = touch.target;
+      while (target && target !== viewport && !target.hasPointerCapture(id)) target = target.parentElement;
+      if (target && target !== viewport) {
+        target.dispatchEvent(new PointerEvent('pointercancel',{pointerId:id,pointerType:'touch'}));
+      }
+      viewport.setPointerCapture(id);
+    }
+    pan = null;
+    delete viewport.dataset.panning;
+    const {distance,point} = touchGeometry();
+    pinch = {distance:Math.max(1,distance),scale:boardScale,anchor:boardAnchor(point)};
+    event.preventDefault();
+    event.stopPropagation();
+  }
+
+  viewport.addEventListener('pointerdown',event=>{
+    if (event.pointerType === 'touch') {
+      boardTouches.set(event.pointerId,{x:event.clientX,y:event.clientY,target:event.target});
+      if (boardTouches.size >= 2) {
+        capturePinch(event);
+        return;
+      }
+    }
+    const onObject = event.target.closest('.cn-scrap,.cn-decor-piece,#cn-transform');
+    if (event.button !== 1 && (event.button !== 0 || onObject || tool !== 'move')) return;
+    if (pan) return;
+    pan = {id:event.pointerId,x:event.clientX,y:event.clientY};
+    viewport.setPointerCapture(event.pointerId);
+    event.preventDefault();
+    event.stopPropagation();
+  },true);
+  viewport.addEventListener('pointermove',event=>{
+    const touch = boardTouches.get(event.pointerId);
+    if (touch) Object.assign(touch,{x:event.clientX,y:event.clientY});
+    if (pinch && touch && boardTouches.size >= 2) {
+      const {distance,point} = touchGeometry();
+      setZoom(pinch.scale*distance/pinch.distance,{point,anchor:pinch.anchor});
+    } else if (pan?.id === event.pointerId) {
+      viewport.dataset.panning = '';
+      const dy = pan.y-event.clientY;
+      const before = viewport.scrollTop;
+      viewport.scrollBy(pan.x-event.clientX,dy);
+      const remaining = dy-(viewport.scrollTop-before);
+      if (event.pointerType === 'touch' && Math.abs(remaining) > 1) window.scrollBy(0,remaining);
+      pan.x = event.clientX;
+      pan.y = event.clientY;
+    } else {
+      return;
+    }
+    event.preventDefault();
+    event.stopPropagation();
+  },true);
+  function finishViewGesture(event) {
+    if (!event.isTrusted) return;
+    boardTouches.delete(event.pointerId);
+    if (boardTouches.size < 2) pinch = null;
+    if (pan?.id !== event.pointerId) return;
+    pan = null;
+    delete viewport.dataset.panning;
+  }
+  viewport.addEventListener('pointerup',finishViewGesture,true);
+  viewport.addEventListener('pointercancel',finishViewGesture,true);
   render();
-  if (globalThis.ResizeObserver) new ResizeObserver(layout).observe(board);
+  if (globalThis.ResizeObserver) new ResizeObserver(layout).observe(viewport);
   matchMedia('(prefers-color-scheme: dark)').addEventListener('change',paint);
   window.addEventListener('pagehide', () => {
     if (saveTimer !== null) persist();
